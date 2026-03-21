@@ -13,52 +13,69 @@ The solution is constrained to the AWS Free Tier, single OS-based compute, and a
 ## 2. Requirements
 The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED",  "MAY", and "OPTIONAL" in this document are to be interpreted as described in [RFC 2119](https://datatracker.ietf.org/doc/html/rfc2119).
 
-### 2.1. Functional Requirements (FR)
+### 2.1. Functional Requirements (FRs)
 
 #### 2.1.1. Application
-| ID | Requirement                                                                                                                                          |
-|----|------------------------------------------------------------------------------------------------------------------------------------------------------|
-| FR-01 | The application SHALL implement Conway's Game of Life acording to the standard ruleset: underpopulation, survival, overpopulation, and reproduction. |
-| FR-02 | The application SHALL generate a random placement of cells at the start.                                                                             |
-| FR-03 | The application SHALL support a configurable board size.                                                                                             |
-| FR-04 | The application SHALL support a configurable number of generations.                                                                                  |
-| FR-05 | The application SHALL display each generation to the standard console output.                                                                        |
+| ID | Requirement                                                                                                                                           |
+|----|-------------------------------------------------------------------------------------------------------------------------------------------------------|
+| FR-01 | The application SHALL implement Conway's Game of Life according to the standard ruleset: underpopulation, survival, overpopulation, and reproduction. |
+| FR-02 | The application SHALL generate a random placement of cells at the start.                                                                              |
+| FR-03 | The application SHALL support a configurable board size.                                                                                              |
+| FR-04 | The application SHALL support a configurable number of generations.                                                                                   |
+| FR-05 | The application SHALL display each generation to the standard console output.                                                                         |
 
 #### 2.1.2. Infrastructure
 | ID    | Requirement                                                                                              |
 |-------|----------------------------------------------------------------------------------------------------------|
-| ID    | Requirement                                                                                              |
-| ----  | -------------                                                                                            |
-| FR-07 | A custom VPC SHALL be provisoined in the eu-west-1 (Ireland) region.                                     |
-| FR-08 | The VPC SHALL contain two public subnets, each in a separate availablity zone.                          |
-| FR-09 | Both subnets SHALL have internet access                                                                  |
-| FR-10 | Two Linux-based EC2 instances SHALL be provisioned, one in each public subnet.                           |
-| FR-11 | Each EC2 instance SHALL run a web server that returns the hostname and IP address of the current server. |
-| FR-12 | An Application Load Balancer SHALL distrbute HTTP traffic across both EC2 instances.                    |
-| FR-13 | A read-only IAM user with console-only access SHALL be created for reviewer access.                      |
+| FR-06 | A custom VPC SHALL be provisioned in the eu-west-1 (Ireland) region.                                     |
+| FR-07 | The VPC SHALL contain two public subnets, each in a separate availability zone.                          |
+| FR-08 | Both subnets SHALL have internet access                                                                  |
+| FR-09 | Two Linux-based EC2 instances SHALL be provisioned, one in each public subnet.                           |
+| FR-10 | Each EC2 instance SHALL run a web server that returns the hostname and IP address of the current server. |
+| FR-11 | An Application Load Balancer SHALL distribute HTTP traffic across both EC2 instances.                    |
+| FR-12 | A read-only IAM user with console-only access SHALL be created for reviewer access.                      |
 
 #### 2.1.3. Out-of-scope 
 | ID     | Requirement                                                   |
 |--------|---------------------------------------------------------------|
-| OFR-01 | The application MAY be deployed to the AWS Infrastructure.    |
-| OFR-02 | Infrastructure MAY be provisioned via Infrastructure as Code. |
+| OFR-01 | Application deployment to the AWS Infrastructure.             |
+| OFR-02 | Infrastructure provisioning via Infrastructure as Code (IAC). |
 
+### 2.2. Non-Functional Requirements (NFRs)
 
-### 2.2. Non-Functional (NFR)
-| ID | Requirement |
-|----|-------------|
+#### 2.3.1. General
+| ID     | Requirement                                                                        |
+|--------|------------------------------------------------------------------------------------|
+| NFR-01 | The repository SHALL maintain an incremental git history demonstrating the evolution of the solution. |
+| NFR-02 | A README SHALL enable anyone to build, test, and run the application.              |
+| NFR-03 | A SOLUTIONARCHITECTURE.md SHALL the various SDLC activities.                       |
 
+#### 2.2.2. Application
+| ID     | Requirement                                                                 |
+|--------|-----------------------------------------------------------------------------|
+| NFR-04 | The application SHALL build and run via dotnet CLI using .NET 10 (LTS) SDK. |
+| NFR-05 | The core game engine SHALL enable isolated unit testing.                    |
 
-#### 2.2.1. Application
-| ID | Requirement |
-|----|-------------|
+#### 2.2.3. Infrastructure
+| ID     | Requirement                                                                                              |
+|--------|----------------------------------------------------------------------------------------------------------|
+| NFR-06 | All AWS resources SHALL remain within the AWS Free Tier.                                                 |
+| NFR-07 | The provisioning IAM user SHALL follow the principle of least privilege. The root account SHALL not be used. |
+| NFR-08 | Security groups SHALL restrict EC2 inbound traffic to the ALB only; the ALB SHALL accept inbound traffic |
 
-
-#### 2.3.2. Infrastructure
+#### 2.2.4. Out-of-Scope
+| ID      | Item                                                        |
+|---------|-------------------------------------------------------------|
+| ONFR-01 | Scaling (Auto-scaling, vertical or horizontal scaling)      |
+| ONFR-02 | Recovery, failover, or self-healing infrastructure.         |
+| ONFR-03 | Infrastructure performance targets                          |
+| ONFR-03 | Infrastructure performance targets                          |
+| ONFR-04 | Observability                                               |
+| ONFR-05 | HTTPS/TLS termination or custom domain configuration. (TBC) |
 
 ## 3. Research & Analysis
 
-## D4.esign
+## Design
 
 ## 5. Development
 
