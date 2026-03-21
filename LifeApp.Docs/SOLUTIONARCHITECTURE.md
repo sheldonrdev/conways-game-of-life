@@ -128,6 +128,13 @@ You are able to slow down the generation to a point where you can observe the ru
 TODO
 
 ## 5. Development
+The development of the [Application](#421-application) follows an interative approach, building up and around the fundamental logic unit, the [Game Rules](#312-rules).
+
+### 5.1. Iterations
+| Component  | Detail                                                      |
+|------------|-------------------------------------------------------------|
+| Game Rules | Static class to apply the rules based on the of neigbours   |
+
 
 ## 6. Infrastructure
 
