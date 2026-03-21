@@ -57,11 +57,11 @@ The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "S
 | NFR-05 | The core game engine SHALL enable isolated unit testing.                    |
 
 #### 2.2.3. Infrastructure
-| ID     | Requirement                                                                                              |
-|--------|----------------------------------------------------------------------------------------------------------|
-| NFR-06 | All AWS resources SHALL remain within the AWS Free Tier.                                                 |
-| NFR-07 | The provisioning IAM user SHALL follow the principle of least privilege. The root account SHALL not be used. |
-| NFR-08 | Security groups SHALL restrict EC2 inbound traffic to the ALB only; the ALB SHALL accept inbound traffic |
+| ID     | Requirement                                                                                                     |
+|--------|-----------------------------------------------------------------------------------------------------------------|
+| NFR-06 | All AWS resources SHALL remain within the AWS Free Tier.                                                        |
+| NFR-07 | The provisioning IAM user SHALL follow the principle of least privilege. The root account SHALL not be used.    |
+| NFR-08 | Security groups SHALL restrict EC2 inbound traffic to the ALB only; the ALB SHALL accept inbound traffic (HTTP) |
 
 #### 2.2.4. Out-of-Scope
 | ID      | Item                                                        |
