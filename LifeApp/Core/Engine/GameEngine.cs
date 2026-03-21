@@ -1,3 +1,5 @@
+using LifeApp.Core.Rules;
+
 namespace LifeApp.Core.Engine;
 
 public class GameEngine : IGameEngine
@@ -29,5 +31,25 @@ public class GameEngine : IGameEngine
         }
 
         return count;
+    }
+
+    public bool[,] GetNextGeneration(bool[,] grid)
+    {
+        var rows = grid.GetLength(0);
+        var cols = grid.GetLength(1);
+        var next = new bool[rows, cols];
+
+        for (var row = 0; row < rows; row++)
+        {
+            for (var col = 0; col < cols; col++)
+            {
+                var neighbours = GetLiveNeighbours(grid, row, col);
+                var alive = grid[row, col];
+
+                next[row, col] = GameRules.ApplyRules(alive, neighbours);
+            }
+        }
+
+        return next;
     }
 }

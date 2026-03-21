@@ -10,4 +10,11 @@ public interface IGameEngine
     /// <param name="col"></param>
     /// <returns></returns>
     int GetLiveNeighbours(bool[,] grid, int row, int col);
+
+    /// <summary>
+    ///     Computes the next generation of the grid by applying the rules to each cell.
+    /// </summary>
+    /// <param name="grid"></param>
+    /// <returns></returns>
+    bool[,] GetNextGeneration(bool[,] grid);
 }

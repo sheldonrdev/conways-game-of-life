@@ -117,4 +117,43 @@ public class GameEngineTests
         Assert.Equal(8, _gameEngine.GetLiveNeighbours(grid, 1, 1));
     }
     #endregion
+
+    #region GetNextGeneration - Grid integrity
+    [Fact]
+    public void NextGeneration_PreservesGridDimensions()
+    {
+        var grid = new bool[,]
+        {
+            { false, true,  false },
+            { false, true,  false },
+            { false, true,  false }
+        };
+
+        var next = _gameEngine.GetNextGeneration(grid);
+
+        Assert.Equal(grid.GetLength(0), next.GetLength(0));
+        Assert.Equal(grid.GetLength(1), next.GetLength(1));
+    }
+
+    [Fact]
+    public void NextGeneration_DoesNotMutateOriginalGrid()
+    {
+        var grid = new bool[,]
+        {
+            { false, true,  false },
+            { false, true,  false },
+            { false, true,  false }
+        };
+
+        // Clone original for comparison post generation iteration
+        var original = (bool[,])grid.Clone();
+
+        _gameEngine.GetNextGeneration(grid);
+
+        for (var row = 0; row < grid.GetLength(0); row++)
+        for (var col = 0; col < grid.GetLength(1); col++)
+            Assert.Equal(original[row, col], grid[row, col]);
+    }
+    #endregion
+
 }

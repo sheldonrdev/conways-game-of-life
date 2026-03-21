@@ -159,6 +159,10 @@ By treating the grid like an image where each block is analogous to an image pix
 1. Ensure all rules are applied simulataneous for every cell being resolved, as mentioned in [Section 3.1.2](#312-rules)
 2. Decouple game engine execution from grid traversal (testing and scaling benefits) which allows for separation of concerns and single responsibility (SOLID principles) in the code.
 
+#### 4.1.1.3 Generation Iterations
+I chose to return a new grid from `GetNextGeneration` rather than modifying the input grid in-place. 
+This ensures every cell is evaluated against the same generation iteration and prevents processing a grid with a mix of current and next generation state which would mess up the `GetLiveNeighbours` result.
+
 | Decision | Context                                                                                           |
 |--------------|-----------------------------------------------------------------------------------------------|
 | HTTP only | HTTPS would require ACM + Route53 or a self-signed cert with no practical benefit for this task. |
