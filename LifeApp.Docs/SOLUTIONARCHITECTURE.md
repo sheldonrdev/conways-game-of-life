@@ -134,6 +134,8 @@ Objects would also work well but ultimately would burden the garbage collector a
 In C#, a 2D array is the closest high-performance analogous to a Matlab matrix. 
 This data structure ensures excellent CPU cache locality, constant time `O(1)` access and predictable memory allocation (continguous memory locations), keeping the core game engine fast and lightweight.
 
+Grid creation is done by means of a very simple Factory method (strictly speaking *NOT* GOF Factory Pattern) given it's purpose is purely creational.
+
 ##### 4.1.1.1.1. Grid Randomness
 In my current role within the iGaming industry, *Random Number Generators* (RNGs) are critical elements which must be certifiable, auditable, and reproducible for regulatory compliance. 
 From my experience at GamesGlobal, I understand the importance of being able to reproduce a sequence of "random" outcomes given the same initial conditions.
@@ -141,6 +143,21 @@ From my experience at GamesGlobal, I understand the importance of being able to 
 I applied this principle to the grid generation by supporting an optional seed parameter. 
 1. When provided, the same seed produces an identical initial grid every time, enabling deterministic test cases which would otherwise fail and drive one nuts. 
 2. When omitted, the system defaults to non-deterministic randomness for normal execution.
+
+#### 4.1.1.2. Neighbours
+My [Engineering Thesis](https://1drv.ms/b/c/f5e6b5f19a1ec68c/IQCfZ1nfTJGbSZo-6bI-l3F4AQSQXjkSfHigr1XTs2SqOJk?e=ZUqqqX) focused on High-Dynamic-Range (HDR) imaging. 
+At the time commercial HDR monitors did not exist and so I had to compress HDR image maps into standard dynamic range (SDR) images for display on our conventional monitors.
+This allowed me to computationally process HDR images and once the main objective (Feature detection in extreme lighting conditions) was achieved, I could map the result into a form (pseudo HDR) that could be displayed on our monitors.
+To achieve this, I wrote an algorithm which applied a 2D NxN convolutional matrix (Gaussian filter), with a Chebyshev distance of *n* from its centre, over an image to be able resolve the contrast local to the matrix.
+
+Now, Conway's game requires you to count the alive neighbours adjacent to a cell. 
+This results in a 3x3 matrix (1 Centre Cell + 8 Neighbours) being resolved for every cell (except cells at the edge) on the grid.
+This counting is not just a nested loop with an if statement; conceptually, it is a 2D 3×3 (N=3) convolutional matrix (with Chebyshev distance = 1 from its centre) sliding over a 2D grid. 
+This *unique insight and experience* led me to the [Moore Neighbourhood](https://en.wikipedia.org/wiki/Chebyshev_distance) which is essentially a 2D 3x3 matrix with a Chebyshev distance of 1 from the center.
+
+By treating the grid like an image where each block is analogous to an image pixel and utilising the Moore Neighbourhood which is analogous to a 2D 3x3 convolutional matrix, I am able to achieve two things in the application
+1. Ensure all rules are applied simulataneous for every cell being resolved, as mentioned in [Section 3.1.2](#312-rules)
+2. Decouple game engine execution from grid traversal (testing and scaling benefits) which allows for separation of concerns and single responsibility (SOLID principles) in the code.
 
 | Decision | Context                                                                                           |
 |--------------|-----------------------------------------------------------------------------------------------|
@@ -165,6 +182,7 @@ The development of the [Application](#421-application) follows an interative app
 |--------------|--------------------------------------------------------------------------|
 | Game Rules   | Static class to apply the rules based on the of neigbours.               |
 | Grid Factory | Static class which creates a random grid with optional seeding.          |
+| Game Engine  | Instantiable service encapsulating relevant game logic and functionality |
 
 
 ## 6. Infrastructure

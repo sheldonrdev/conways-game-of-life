@@ -8,6 +8,7 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <Folder Include="Core\Engine\" />
       <Folder Include="Core\Grid\" />
       <Folder Include="Core\Rules\" />
     </ItemGroup>
