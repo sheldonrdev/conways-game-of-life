@@ -64,18 +64,59 @@ The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "S
 | NFR-08 | Security groups SHALL restrict EC2 inbound traffic to the ALB only; the ALB SHALL accept inbound traffic (HTTP) |
 
 #### 2.2.4. Out-of-Scope
-| ID      | Item                                                        |
-|---------|-------------------------------------------------------------|
-| ONFR-01 | Scaling (Auto-scaling, vertical or horizontal scaling)      |
-| ONFR-02 | Recovery, failover, or self-healing infrastructure.         |
-| ONFR-03 | Infrastructure performance targets                          |
-| ONFR-03 | Infrastructure performance targets                          |
-| ONFR-04 | Observability                                               |
-| ONFR-05 | HTTPS/TLS termination or custom domain configuration. (TBC) |
+| ID      | Item                                                         |
+|---------|--------------------------------------------------------------|
+| ONFR-01 | Scaling (Auto-scaling, vertical or horizontal scaling).      |
+| ONFR-02 | Recovery, failover, or self-healing infrastructure.          |
+| ONFR-03 | Infrastructure performance targets.                          |
+| ONFR-03 | Infrastructure performance targets.                          |
+| ONFR-04 | Observability (traces, logs, metrics, monitoring, alerting). |
+| ONFR-05 | HTTPS/TLS termination or custom domain configuration. (TBC). |
 
 ## 3. Research & Analysis
+### 3.1. Conway's Game of Life
+The provided [Wikipedia page](https://en.wikipedia.org/wiki/Conway%27s_Game_of_Life) describes it as a zero-player cellular automaton devised by mathematician John Conway in 1970. 
+The game evolves from an initial state with no further input, governed by four deterministic rules applied simultaneously to every cell each generation.
 
-## Design
+#### 3.1.1 Core Components
+| Component    | Description                                                                |
+|--------------|----------------------------------------------------------------------------|
+| Grid         | A two-dimensional grid of cells. Configurable dimensions (rows × columns). |
+| Cell         | The basic unit of the grid. Binary states: **alive** or **dead**.          |
+| Neighbours   | The immediately adjacent cells surrounding a given cell.                   |
+
+NB.
+1. Grid does not have to be square.
+2. Cell + Neighbours form a 3x3 grid therefore max 8 neighbours per cell.
+3. Cells at edge are evaluated therefore neighbours for cells at edge < 8.
+
+#### 3.1.2. Rules
+This [Ruleset reference](https://playgameoflife.com/info) provides a visual representation of the rules which can be summarised as follows:
+
+| Rule             | Condition                                    | Outcome    |
+|------------------|----------------------------------------------|------------|
+| Underpopulation  | Live cell with fewer than 2 live neighbours. | Cell dies  |
+| Survival         | Live cell with 2 or 3 live neighbours.       | Cell lives |
+| Overpopulation   | Live cell with more than 3 live neighbours.  | Cell dies  |
+| Reproduction     | Dead cell with exactly 3 live neighbours.    | Cell is born |
+
+NB. 
+1. All rules are applied simultaneously.
+2. The next generation is computed from the current generation.
+3. Only a cells immediate (directly in contact) neighbours are considered.
+
+#### 3.1.3. Demo
+This [Interactive demo](https://playgameoflife.com/) provides a demonstration of the game and its rules in action.
+You are able to slow down the generation to a point where you can observe the rules being applied.
+
+## 4. Architecture
+
+## 4.1 Decisions
+| Decision | Context                                                                                           |
+|--------------|-----------------------------------------------------------------------------------------------|
+| HTTP only | HTTPS would require ACM + Route53 or a self-signed cert with no practical benefit for this task. |
+
+## 4.2. Design
 
 ## 5. Development
 
