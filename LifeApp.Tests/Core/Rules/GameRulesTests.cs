@@ -1,6 +1,6 @@
 using LifeApp.Core.Rules;
 
-namespace LifeApp.Tests;
+namespace LifeApp.Tests.Core.Rules;
 
 public class GameRulesTests
 {

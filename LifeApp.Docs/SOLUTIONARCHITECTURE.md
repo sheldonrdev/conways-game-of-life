@@ -110,8 +110,38 @@ This [Interactive demo](https://playgameoflife.com/) provides a demonstration of
 You are able to slow down the generation to a point where you can observe the rules being applied.
 
 ## 4. Architecture
+Whilst researching Conway's Game of Life and processing its rules and considering my approach it became clear that I could draw on knowledge from both my undergrad studies and professional career. 
+Coming from an Electronic Engineering background, I naturally interpretted this problem through the lens of digital signal (image) processing and matrix mathematics. 
+
+Whilst I wrote my university thesis over a decade ago, long before AI existed in its current form, the fundamental knowledge I developed then provided the intuition for how to architect this system today.
+
+This is documented in detail in [Application Decisions](#411-application) below and references my [Engineering Thesis](https://1drv.ms/b/c/f5e6b5f19a1ec68c/IQCfZ1nfTJGbSZo-6bI-l3F4AQSQXjkSfHigr1XTs2SqOJk?e=ZUqqqX).
 
 ## 4.1 Decisions
+
+### 4.1.1. Application
+
+#### 4.1.1.1. Grid
+As I noted in *Section 4.1* of my [Engineering Thesis](https://1drv.ms/b/c/f5e6b5f19a1ec68c/IQCfZ1nfTJGbSZo-6bI-l3F4AQSQXjkSfHigr1XTs2SqOJk?e=ZUqqqX), MATLAB stands for *Matrix Laboratory*, and I chose it as my IDE because of its basic data element, the matrix. 
+
+I later extended my MATLAB experience during tenure at Opti-Num Solutions. 
+Whilst developing the MATHLAB OPC UA Toolboxfor Mathworks, I had to bridge traditional object-oriented C++ architecture with MATLAB's foundational vector types.
+
+That experience directly influenced my C# architecture for this assessment. 
+Rather than leverage objects (OOP), which live on the heap, for each `Cell`, I chose the humble 2D array. 
+Objects would also work well but ultimately would burden the garbage collector at scale, introducing performance issues.
+
+In C#, a 2D array is the closest high-performance analogous to a Matlab matrix. 
+This data structure ensures excellent CPU cache locality, constant time `O(1)` access and predictable memory allocation (continguous memory locations), keeping the core game engine fast and lightweight.
+
+##### 4.1.1.1.1. Grid Randomness
+In my current role within the iGaming industry, *Random Number Generators* (RNGs) are critical elements which must be certifiable, auditable, and reproducible for regulatory compliance. 
+From my experience at GamesGlobal, I understand the importance of being able to reproduce a sequence of "random" outcomes given the same initial conditions.
+
+I applied this principle to the grid generation by supporting an optional seed parameter. 
+1. When provided, the same seed produces an identical initial grid every time, enabling deterministic test cases which would otherwise fail and drive one nuts. 
+2. When omitted, the system defaults to non-deterministic randomness for normal execution.
+
 | Decision | Context                                                                                           |
 |--------------|-----------------------------------------------------------------------------------------------|
 | HTTP only | HTTPS would require ACM + Route53 or a self-signed cert with no practical benefit for this task. |
@@ -131,9 +161,10 @@ TODO
 The development of the [Application](#421-application) follows an interative approach, building up and around the fundamental logic unit, the [Game Rules](#312-rules).
 
 ### 5.1. Iterations
-| Component  | Detail                                                      |
-|------------|-------------------------------------------------------------|
-| Game Rules | Static class to apply the rules based on the of neigbours   |
+| Component    | Detail                                                                   |
+|--------------|--------------------------------------------------------------------------|
+| Game Rules   | Static class to apply the rules based on the of neigbours.               |
+| Grid Factory | Static class which creates a random grid with optional seeding.          |
 
 
 ## 6. Infrastructure

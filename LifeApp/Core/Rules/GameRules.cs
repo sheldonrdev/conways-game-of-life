@@ -1,6 +1,8 @@
 namespace LifeApp.Core.Rules;
 
-public static class GameRules // Static as its stateless
+// NB.
+// Static as its stateless
+public static class GameRules 
 {
     public static bool ApplyRules(bool isAlive, int liveNeighbours)
     {
