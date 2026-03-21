@@ -118,6 +118,15 @@ You are able to slow down the generation to a point where you can observe the ru
 
 ## 4.2. Design
 
+### 4.2.1. Application
+![App Arch](assets/application-design.drawio.svg)
+
+### 4.2.2. Game Engine
+![Algorithm Flow](assets/game-engine-design.drawio.svg)
+
+### 4.2.3. Infrastructure
+TODO
+
 ## 5. Development
 
 ## 6. Infrastructure
