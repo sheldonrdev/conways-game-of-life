@@ -5,6 +5,7 @@ namespace LifeApp.Core.Engine;
 public class GameEngine : IGameEngine
 {
     // Leverages Moore Neighbourhood
+    // Kept public intentionally (Testability over Accessibility)
     public int GetLiveNeighbours(bool[,] grid, int row, int col)
     {
         var rows = grid.GetLength(0);
@@ -20,7 +21,7 @@ public class GameEngine : IGameEngine
                 var r = row + mooreRow;
                 var c = col + mooreCol;
 
-                // Handle theedges
+                // Handle the edges
                 if (r >= 0 && r < rows &&
                     c >= 0 && c < cols && 
                     grid[r, c]) // opted for bool[,] to allow for simple conditional checks like this

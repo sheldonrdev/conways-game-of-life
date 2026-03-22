@@ -196,6 +196,11 @@ The development of the [Application](#421-application) follows an interative app
 Static classes are used for pure, stateless functions (`GameRules`, `GridFactory`, `GridDisplay`) where inputs deterministically produce outputs with no need for mocking or substitution (e.g. Strategy Pattern). 
 The `GameEngine` uses an interface (`IGameEngine`) as it orchestrates multiple processes and also provides the option for mocking (not required here though).
 
+#### 5.2.2. Public vs Private
+The `GetLiveNeighbours` member function within the `IGameEngine` has be intentionally created with a `Public` access modifier.
+Whilst it is an implementation detail of `IGameEngine` and not likely something that external callers need access to, it contains logic (non-sensitive, non-destructive) that is critical to the operation of the game and therefore requires testability.
+The tradeoff here is in favour of testability over accessibility.
+
 ## 6. Infrastructure
 
 ## 7. Testing
