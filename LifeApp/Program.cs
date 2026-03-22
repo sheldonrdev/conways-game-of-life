@@ -15,8 +15,10 @@ class Program
 
         for (var gen = 0; gen < generations; gen++)
         {
+            Console.Clear();
             Console.WriteLine($"Generation {gen}:");
             GridDisplay.Output(grid);
+            Thread.Sleep(500);
             grid = gameEngine.GetNextGeneration(grid);
         }
     }
