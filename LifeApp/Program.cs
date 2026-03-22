@@ -11,12 +11,10 @@ class Program
 
         do
         {
-            Console.Write("Enter number of rows: ");
-            var rows = int.Parse(Console.ReadLine()!);
-            Console.Write("Enter number of columns: ");
-            var cols = int.Parse(Console.ReadLine()!);
-            Console.Write("Enter number of generations: ");
-            var generations = int.Parse(Console.ReadLine()!);
+            // Input validation
+            var rows = GetValidInput("Enter number of rows: ");
+            var cols = GetValidInput("Enter number of columns: ");
+            var generations = GetValidInput("Enter number of generations: ");
 
             var grid = GridFactory.CreateRandomGrid(rows, cols);
 
@@ -35,5 +33,20 @@ class Program
         
         Console.WriteLine("Thanks for playing :)");
         Thread.Sleep(500);
+    }
+
+    // Non-Numeric, Zero/Negative checks
+    private static int GetValidInput(string prompt)
+    {
+        while (true) // Continue until valid input is received
+        {
+            Console.Write(prompt);
+            var input = Console.ReadLine();
+            
+            if (int.TryParse(input, out var value) && value > 0) 
+                return value;
+            
+            Console.WriteLine("Please enter a positive whole number.");
+        }
     }
 }
