@@ -163,6 +163,14 @@ By treating the grid like an image where each block is analogous to an image pix
 I chose to return a new grid from `GetNextGeneration` rather than modifying the input grid in-place. 
 This ensures every cell is evaluated against the same generation iteration and prevents processing a grid with a mix of current and next generation state which would mess up the `GetLiveNeighbours` result.
 
+#### 4.1.1.4. Edges
+
+In image processing, the edges of an image can be tricky to process without throwing out-of-bounds errors or corrupting data. 
+As a photographer, I'm also aware of how camera manufacturers, such as Fujifilm, crop images (JPG) intentionally to reduce "soft" or non-sharp edges caused by in-camera filter application.
+In essence, Edges matter! 
+
+The [Edge development](#523-edge-optimisation) section details how this was implemented as well as the optimisation performed.
+
 | Decision | Context                                                                                           |
 |--------------|-----------------------------------------------------------------------------------------------|
 | HTTP only | HTTPS would require ACM + Route53 or a self-signed cert with no practical benefit for this task. |
@@ -200,6 +208,18 @@ The `GameEngine` uses an interface (`IGameEngine`) as it orchestrates multiple p
 The `GetLiveNeighbours` member function within the `IGameEngine` has be intentionally created with a `Public` access modifier.
 Whilst it is an implementation detail of `IGameEngine` and not likely something that external callers need access to, it contains logic (non-sensitive, non-destructive) that is critical to the operation of the game and therefore requires testability.
 The tradeoff here is in favour of testability over accessibility.
+
+#### 5.2.3. Edge Optimisation
+Applying these [Edge lessons](#4114-edges) to the boundaries of the Game of Life grid, I avoided using expensive `try/catch` blocks or deeply nested `if` statements.
+Initially I had looped from -1 to +1 as offsets, computed the position, then checked if it's valid before reading.
+Thereafter I made the optimisation to pre-compute the safe bounds upfront so every iteration is guaranteed valid. No checking needed inside.
+Commit `e3b3f43c` reflects this change.
+
+The first approach enters iterations it might skip. 
+The second approach doesn't bother itself by an invalid iteration in the first place.
+
+To do this I used basic mathematical functions (`Math.Max` and `Math.Min`) to safely process cells at the edges.
+This maintains high performance while ensuring the logic is never executed outside the grid boundaries.
 
 ## 6. Infrastructure
 
