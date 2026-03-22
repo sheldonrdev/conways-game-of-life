@@ -136,7 +136,7 @@ This data structure ensures excellent CPU cache locality, constant time `O(1)` a
 
 Grid creation is done by means of a very simple Factory method (strictly speaking *NOT* GOF Factory Pattern) given it's purpose is purely creational.
 
-##### 4.1.1.1.1. Grid Randomness
+##### 4.1.1.1.1. Grid Randomness (Seeding)
 In my current role within the iGaming industry, *Random Number Generators* (RNGs) are critical elements which must be certifiable, auditable, and reproducible for regulatory compliance. 
 From my experience at GamesGlobal, I understand the importance of being able to reproduce a sequence of "random" outcomes given the same initial conditions.
 
@@ -256,6 +256,32 @@ Taking the above into account and considering the following tradeoffs, the humbl
 
 ## 7. Testing
 
+### 7.1. Overview
+Unit tests are written using xUnit and mirror the application's folder structure (`Core/Rules`, `Core/Engine`, `Core/Grid`).
+Only edge cases are documented here given time constraints.
+
+*NB. Seeding*
+The units tests leverage the seeding in the `GridFactory`. This provides a deterministic grid so assertions are be repeatable.
+Without the seed, every test run would produce different grids, making it impossible to assert on specific cell values.
+
+### 7.2. Edge Cases
+| Area              | Edge Case                                                                        | Rationale                                                                       |
+|-------------------|----------------------------------------------------------------------------------|---------------------------------------------------------------------------------|
+| Game Rules        | All four rules tested with boundary neighbour counts (0, 1, 2, 3, (4/5/6/7)*, 8) | Ensures each rule applies at the correct threshold. *(4/5/6/7) = overpopulation |
+| GridFactory       | Rectangular grids                                                                | Grid does not have to be square.                                                |
+| GridFactory       | Seed                                                                             | Same seed produces identical grids, different seeds produce different grids.    |
+| GetLiveNeighbours | Corner cells (max 3 neighbours)                                                  | Validates `Math.Max`&`Math.Min` for edge calculation.                           |
+| GetLiveNeighbours | Edge cells (max 5 neighbours)                                                    | Validates handling at one edge.                                                 |
+| GetLiveNeighbours | Centre cells (max 8 neighbours)                                                  | Validates no edge handling required.                                            |
+| GetLiveNeighbours | Dead centre cell with 8 Live neighbours                                          | Validates centre cell itself is excluded from the neighbour count.              |
+| GetLiveNeighbours | 1x1 grid                                                                         | Minimum possible grid. 0 neighbours, no bound exceptions.                       |
+| GetNextGeneration | Grid dimension consistency                                                       | Output grid dimensions matches input grid dimensions.                           |
+| GetNextGeneration | Input safety                                                                     | Original grid is not mutated. Prevents processing mixed states (current & next) |
+| GetNextGeneration | 1x1 grid produces correct result                                                 | Single alive cell dies from underpopulation.                                    |
+
 ## 8. References
-
-
+[Wikipedia page](https://en.wikipedia.org/wiki/Conway%27s_Game_of_Life)
+[Ruleset reference](https://playgameoflife.com/info)
+[Interactive demo](https://playgameoflife.com/)
+[Sheldon Reddy - Engineering Thesis](https://1drv.ms/b/c/f5e6b5f19a1ec68c/IQCfZ1nfTJGbSZo-6bI-l3F4AQSQXjkSfHigr1XTs2SqOJk?e=ZUqqqX).
+[MIT Notes](https://web.mit.edu/sp.268/www/2010/lifeSlides.pdf)
