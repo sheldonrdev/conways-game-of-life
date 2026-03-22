@@ -171,6 +171,18 @@ In essence, Edges matter!
 
 The [Edge development](#523-edge-optimisation) section details how this was implemented as well as the optimisation performed.
 
+#### 4.1.1.5 Scaling
+During the defence session of my [Engineering Thesis](https://1drv.ms/b/c/f5e6b5f19a1ec68c/IQCfZ1nfTJGbSZo-6bI-l3F4AQSQXjkSfHigr1XTs2SqOJk?e=ZUqqqX), I was asked how I would handle image resolutions that were infinitely large, assuming there was hypothetically no constraint on how large camera sensors could be.
+This is analogous to a increasing grid size exponentially towards an infinitely large grid and essentially is a *scaling concern*.
+
+My thesis covered this concern in a few ways:
+1. Downsampling all images, irrespective of input resolution, to ensure the downstream image processing pipeline performance remains deterministic.
+2. Leveraging the correct underlying data structure provided the hypothetical situation became in-scope. 
+3. Leveraging parallel compute.
+
+I leveraged that insight (specifically #2 and #3) above guide my development decision in respect of scaling.
+
+
 | Decision | Context                                                                                           |
 |--------------|-----------------------------------------------------------------------------------------------|
 | HTTP only | HTTPS would require ACM + Route53 or a self-signed cert with no practical benefit for this task. |
@@ -220,6 +232,18 @@ The second approach doesn't bother itself by an invalid iteration in the first p
 
 To do this I used basic mathematical functions (`Math.Max` and `Math.Min`) to safely process cells at the edges.
 This maintains high performance while ensuring the logic is never executed outside the grid boundaries.
+
+#### 5.2.4. Scaling
+Whilst a 2D array is optimal and sufficient for this specific assessment and it's in-scope requirements, an infinitely large grid would require a different data structure approach:
+
+1. **Data structure:** For an infinitely large grid, I would pivot from a 2D array to a `HashSet<(int r, int c)>` to track only the coordinates of living cells, drastically reducing memory usage. We don't really care about tracking dead cells so they don't need to be stored because any coordinate not in the set is essentially dead.
+2. **Parellisation:** Because my current architecture uses two arrays (current, next) where the current is read-only, the grid calculation is inherently thread-safe. The `Game Engine` compute could be parallelised using the built in .NET `Parallel.For` loop.
+3. **Hardware acceleration:**  Again, due to the thread-safe grid calc, for an infinitely large grid, if the requirement to process millions of cells came into scope, the `Game Engine` compute could offloaded to a GPU like modern image processing pipelines.
+
+Taking the above into account and considering the following tradeoffs, the humble 2D array with non-parellisation and no GPU accelleration was opted for.
+1. Simple Requirements therefore simple execution (YAGNI, KISS). 
+2. Parellising on smaller loop iterations could introduce performance overheads when scheduling threads.
+3. Assumption that the grid will have enough living cells to not be concerned by wasting time processing dead cells (hashset approach shines here) therefore the array's O(1) access complexity should suffice until infinitely large grid requirement becomes in-scope.
 
 ## 6. Infrastructure
 
