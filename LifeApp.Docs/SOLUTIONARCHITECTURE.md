@@ -182,6 +182,13 @@ My thesis covered this concern in a few ways:
 
 I leveraged that insight (specifically #2 and #3) above guide my development decision in respect of scaling.
 
+#### 4.1.1.6 Logic
+
+One of the modules I studied at university was Digital Systems, and ultimately, this algorithm is just a digital system. 
+I view each cell in the grid as a simple Finite State Machine (FSM) governed by standard logic gates leading to binary states (dead or alive). 
+The entire board is a massive array of these FSMs, all transitioning together on a shared cycle, the Generation iteration.
+
+Structuring the code to reflect these state transitions keeps the system highly predictable (deterministic operations being critical to digital systems), scalable, and easy to test.
 
 | Decision | Context                                                                                           |
 |--------------|-----------------------------------------------------------------------------------------------|
