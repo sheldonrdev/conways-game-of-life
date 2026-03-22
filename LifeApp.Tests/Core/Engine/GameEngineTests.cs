@@ -156,4 +156,24 @@ public class GameEngineTests
     }
     #endregion
 
+    #region Minimum grid (1x1) - single cell with no neighbours
+    [Fact]
+    public void SingleAliveCell_HasZeroNeighbours()
+    {
+        var grid = new bool[,] { { true } };
+
+        Assert.Equal(0, _gameEngine.GetLiveNeighbours(grid, 0, 0));
+    }
+
+    [Fact]
+    public void SingleAliveCell_DiesNextGeneration()
+    {
+        var grid = new bool[,] { { true } };
+
+        var next = _gameEngine.GetNextGeneration(grid);
+
+        Assert.False(next[0, 0]);
+    }
+    #endregion
+
 }
