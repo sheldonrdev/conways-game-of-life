@@ -12,22 +12,15 @@ public class GameEngine : IGameEngine
         var cols = grid.GetLength(1);
         var count = 0;
 
-        for (var mooreRow = -1; mooreRow <= 1; mooreRow++)
+        // Compute boundaries upfront - every iteration is guaranteed valid. No checking needed inside.
+        for (var mooreRow = Math.Max(0, row - 1); mooreRow <= Math.Min(rows - 1, row + 1); mooreRow++)
         {
-            for (var mooreCol = -1; mooreCol <= 1; mooreCol++)
+            for (var mooreCol = Math.Max(0, col - 1); mooreCol <= Math.Min(cols - 1, col + 1); mooreCol++)
             {
-                if (mooreRow == 0 && mooreCol == 0) continue; // Skip the Cell (centre) itself
+                if (mooreRow == row && mooreCol == col) continue; // Skip the Cell (centre) itself
 
-                var r = row + mooreRow;
-                var c = col + mooreCol;
-
-                // Handle the edges
-                if (r >= 0 && r < rows &&
-                    c >= 0 && c < cols && 
-                    grid[r, c]) // opted for bool[,] to allow for simple conditional checks like this
-                {
+                if (grid[mooreRow, mooreCol]) // always safe, no edge handling req'd here. Opted for bool[,] to allow for simple conditional checks like this. 
                     count++;
-                }   
             }
         }
 
