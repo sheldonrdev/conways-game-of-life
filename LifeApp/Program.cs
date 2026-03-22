@@ -7,9 +7,13 @@ class Program
 {
     static void Main(string[] args)
     {
-        var rows = 10;
-        var cols = 10;
-        var generations = 10;
+        Console.Write("Enter number of rows: ");
+        var rows = int.Parse(Console.ReadLine()!);
+        Console.Write("Enter number of columns: ");
+        var cols = int.Parse(Console.ReadLine()!);
+        Console.Write("Enter number of generations: ");
+        var generations = int.Parse(Console.ReadLine()!);
+
         var gameEngine = new GameEngine();
         var grid = GridFactory.CreateRandomGrid(rows, cols);
 
