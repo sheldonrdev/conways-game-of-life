@@ -117,11 +117,11 @@ Whilst I wrote my university thesis over a decade ago, long before AI existed in
 
 This is documented in detail in [Application Decisions](#411-application) below and references my [Engineering Thesis](https://1drv.ms/b/c/f5e6b5f19a1ec68c/IQCfZ1nfTJGbSZo-6bI-l3F4AQSQXjkSfHigr1XTs2SqOJk?e=ZUqqqX).
 
-## 4.1 Decisions
+### 4.1 Decisions
 
-### 4.1.1. Application
+#### 4.1.1. Application
 
-#### 4.1.1.1. Grid
+##### 4.1.1.1. Grid
 As I noted in *Section 4.1* of my [Engineering Thesis](https://1drv.ms/b/c/f5e6b5f19a1ec68c/IQCfZ1nfTJGbSZo-6bI-l3F4AQSQXjkSfHigr1XTs2SqOJk?e=ZUqqqX), MATLAB stands for *Matrix Laboratory*, and I chose it as my IDE because of its basic data element, the matrix. 
 
 I later extended my MATLAB experience during tenure at Opti-Num Solutions. 
@@ -144,7 +144,7 @@ I applied this principle to the grid generation by supporting an optional seed p
 1. When provided, the same seed produces an identical initial grid every time, enabling deterministic test cases which would otherwise fail and drive one nuts. 
 2. When omitted, the system defaults to non-deterministic randomness for normal execution.
 
-#### 4.1.1.2. Neighbours
+##### 4.1.1.2. Neighbours
 My [Engineering Thesis](https://1drv.ms/b/c/f5e6b5f19a1ec68c/IQCfZ1nfTJGbSZo-6bI-l3F4AQSQXjkSfHigr1XTs2SqOJk?e=ZUqqqX) focused on High-Dynamic-Range (HDR) imaging. 
 At the time commercial HDR monitors did not exist and so I had to compress HDR image maps into standard dynamic range (SDR) images for display on our conventional monitors.
 This allowed me to computationally process HDR images and once the main objective (Feature detection in extreme lighting conditions) was achieved, I could map the result into a form (pseudo HDR) that could be displayed on our monitors.
@@ -159,11 +159,11 @@ By treating the grid like an image where each block is analogous to an image pix
 1. Ensure all rules are applied simulataneous for every cell being resolved, as mentioned in [Section 3.1.2](#312-rules)
 2. Decouple game engine execution from grid traversal (testing and scaling benefits) which allows for separation of concerns and single responsibility (SOLID principles) in the code.
 
-#### 4.1.1.3 Generation Iterations
+##### 4.1.1.3 Generation Iterations
 I chose to return a new grid from `GetNextGeneration` rather than modifying the input grid in-place. 
 This ensures every cell is evaluated against the same generation iteration and prevents processing a grid with a mix of current and next generation state which would mess up the `GetLiveNeighbours` result.
 
-#### 4.1.1.4. Edges
+##### 4.1.1.4. Edges
 
 In image processing, the edges of an image can be tricky to process without throwing out-of-bounds errors or corrupting data. 
 As a photographer, I'm also aware of how camera manufacturers, such as Fujifilm, crop images (JPG) intentionally to reduce "soft" or non-sharp edges caused by in-camera filter application.
@@ -171,7 +171,7 @@ In essence, Edges matter!
 
 The [Edge development](#523-edge-optimisation) section details how this was implemented as well as the optimisation performed.
 
-#### 4.1.1.5 Scaling
+##### 4.1.1.5 Scaling
 During the defence session of my [Engineering Thesis](https://1drv.ms/b/c/f5e6b5f19a1ec68c/IQCfZ1nfTJGbSZo-6bI-l3F4AQSQXjkSfHigr1XTs2SqOJk?e=ZUqqqX), I was asked how I would handle image resolutions that were infinitely large, assuming there was hypothetically no constraint on how large camera sensors could be.
 This is analogous to a increasing grid size exponentially towards an infinitely large grid and essentially is a *scaling concern*.
 
@@ -182,7 +182,7 @@ My thesis covered this concern in a few ways:
 
 I leveraged that insight (specifically #2 and #3) above guide my development decision in respect of scaling.
 
-#### 4.1.1.6 Logic
+##### 4.1.1.6 Logic
 
 One of the modules I studied at university was Digital Systems, and ultimately, this algorithm is just a digital system. 
 I view each cell in the grid as a simple Finite State Machine (FSM) governed by standard logic gates leading to binary states (dead or alive). 
@@ -190,20 +190,22 @@ The entire board is a massive array of these FSMs, all transitioning together on
 
 Structuring the code to reflect these state transitions keeps the system highly predictable (deterministic operations being critical to digital systems), scalable, and easy to test.
 
+#### 4.2.1. Infrastructure
+
 | Decision | Context                                                                                           |
 |--------------|-----------------------------------------------------------------------------------------------|
 | HTTP only | HTTPS would require ACM + Route53 or a self-signed cert with no practical benefit for this task. |
 
-## 4.2. Design
+### 4.2. Design
 
-### 4.2.1. Application
+#### 4.2.1. Application
 ![App Arch](assets/application-design.drawio.svg)
 
-### 4.2.2. Game Engine
+#### 4.2.2. Game Engine
 ![Algorithm Flow](assets/game-engine-design.drawio.svg)
 
-### 4.2.3. Infrastructure
-TODO
+#### 4.2.3. Infrastructure
+![Infrastructure Architecture](assets/infrastructure-design.drawio.svg)
 
 ## 5. Development
 The development of the [Application](#421-application) follows an interative approach, building up and around the fundamental logic unit, the [Game Rules](#312-rules).
@@ -253,6 +255,7 @@ Taking the above into account and considering the following tradeoffs, the humbl
 3. Assumption that the grid will have enough living cells to not be concerned by wasting time processing dead cells (hashset approach shines here) therefore the array's O(1) access complexity should suffice until infinitely large grid requirement becomes in-scope.
 
 ## 6. Infrastructure
+The infrastructure design is specified under the [Infrastructure design](#423-infrastructure) section.
 
 ## 7. Testing
 
@@ -285,3 +288,4 @@ Without the seed, every test run would produce different grids, making it imposs
 [Interactive demo](https://playgameoflife.com/)
 [Sheldon Reddy - Engineering Thesis](https://1drv.ms/b/c/f5e6b5f19a1ec68c/IQCfZ1nfTJGbSZo-6bI-l3F4AQSQXjkSfHigr1XTs2SqOJk?e=ZUqqqX).
 [MIT Notes](https://web.mit.edu/sp.268/www/2010/lifeSlides.pdf)
+[AWS Icon Pack](https://aws.amazon.com/architecture/icons/)
