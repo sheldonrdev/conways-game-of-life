@@ -27,7 +27,7 @@ The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "S
 #### 2.1.2. Infrastructure
 | ID    | Requirement                                                                                              |
 |-------|----------------------------------------------------------------------------------------------------------|
-| FR-06 | A custom VPC SHALL be provisioned in the eu-west-1 (Ireland) region.                                     |
+| FR-06 | A custom VPC SHALL be provisioned in the eu-north-1 (Stockholm) region.                                  |
 | FR-07 | The VPC SHALL contain two public subnets, each in a separate availability zone.                          |
 | FR-08 | Both subnets SHALL have internet access                                                                  |
 | FR-09 | Two Linux-based EC2 instances SHALL be provisioned, one in each public subnet.                           |
@@ -256,6 +256,30 @@ Taking the above into account and considering the following tradeoffs, the humbl
 
 ## 6. Infrastructure
 The infrastructure design is specified under the [Infrastructure design](#423-infrastructure) section.
+
+### 6.1. Approach
+Given the time constraints, I have opted for a manual setup and configuration of the infrastructure on AWS however I have provided my approach should I have completed the Terraform.
+
+NB. Whilst the assessment mentioned `EU-WEST-1`, I opted for the default `EU-NORTH-1` as it usually works for our POCs.  
+
+#### 6.1.1. Manual Steps
+1. Select Region (`eu-north-1`)
+2. Create IAM Admin User [admin-provisioner](https://367396826363.signin.aws.amazon.com/console)(`AdministratorAccess`)
+3. Delete Default VPC (`vpc-0b5e56ff2da528490/ozow-vpc`)
+4. Create Custom VPC (`vpc-0b5e56ff2da528490/ozow-vpc` | CIDR: `10.0.0.0/16`) (NB. CIDR value used as per AWS courses I've completed in the past)
+5. Create Internet Gateway (`igw-004c1c73db56600bc/ozow-igw` | attached to `vpc-0b5e56ff2da528490/ozow-vpc`)
+6. Create Route Table (`rtb-0c87bd68b92fa3ae2/ozow-public-rt` | associated with `vpc-0b5e56ff2da528490/ozow-vpc`) (Route Destination: `0.0.0.0/0` | Route Target: `igw-004c1c73db56600bc`)
+7. Create Subnet A (`public-subnet-a`|`eu-north-1a`|`10.0.1.0/24`)  `auto-assign public IPv4` and RouteTable configured for `rtb-0c87bd68b92fa3ae2 (ozow-public-rt)`
+8. Create Subnet B (`public-subnet-b(eu-north-1a|10.0.1.0/24) `auto-assign public IPv4` and RouteTable configured` for `rtb-0c87bd68b92fa3ae2 (ozow-public-rt)`
+8. Create Security Group for ALB (`alb-sg` | Inbound `HTTP 80 from 0.0.0.0/0` | Outbound `All` | associated with `vpc-049670ac3fb0177c0/ozow-vpc`) 
+9. Create Security Group for EC2 (`ec2-sg` | Inbound `TCP 8080 from alb-sg` | Outbound `All` | associated with `vpc-049670ac3fb0177c0/ozow-vpc`)
+10. Create EC2 Instance A (`ozow-instance-a` | `Linux 2023` | `t3.micro` | SecurityGroup: `ec2-sg`)
+11. Create EC2 Instance B  (`ozow-instance-b` | `Linux 2023` | `t3.micro` | SecurityGroup: `ec2-sg`)
+12. Create Target Group (`ozow-tg` | `HTTP 8080` | vpc: `vpc-049670ac3fb0177c0/ozow-vpc` ) Instances (`ozow-instance-a`|`ozow-instance-b`)
+13. Create Application Load Balancer (`ozow-instance-a` | `Internet Facing`) Subnets (`public-subnet-a` | `public-subnet-b`) SecurityGroup: `ec2-sg` Listener: `HTTP 80` to `ozow-tg`
+14. Create IAM Review User [OzowSheldonReddy2026](https://367396826363.signin.aws.amazon.com/console) (`ViewOnlyAccess`)
+
+#### 6.1.2. Infrastructure as Code (IAC)
 
 ## 7. Testing
 
