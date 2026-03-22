@@ -187,7 +187,14 @@ The development of the [Application](#421-application) follows an interative app
 | Game Rules   | Static class to apply the rules based on the of neigbours.               |
 | Grid Factory | Static class which creates a random grid with optional seeding.          |
 | Game Engine  | Instantiable service encapsulating relevant game logic and functionality |
+| Game Display | Static service which prints the grid after a generation to console       |
 
+
+### 5.2. Development Decisions
+
+#### 5.2.1. Static Classes vs Interfaces
+Static classes are used for pure, stateless functions (`GameRules`, `GridFactory`, `GridDisplay`) where inputs deterministically produce outputs with no need for mocking or substitution (e.g. Strategy Pattern). 
+The `GameEngine` uses an interface (`IGameEngine`) as it orchestrates multiple processes and also provides the option for mocking (not required here though).
 
 ## 6. Infrastructure
 

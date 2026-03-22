@@ -7,22 +7,17 @@ class Program
 {
     static void Main(string[] args)
     {
+        var rows = 10;
+        var cols = 10;
+        var generations = 10;
         var gameEngine = new GameEngine();
-        
-        bool[,] grid =
+        var grid = GridFactory.CreateRandomGrid(rows, cols);
+
+        for (var gen = 0; gen < generations; gen++)
         {
-            { false, true,  false },
-            { false, false, false  },
-            { true,  true,  true  },
-            { false, false, false }
-        };
-
-        Console.WriteLine("Generation 0:");
-        GridDisplay.Output(grid);
-
-        var gridNextGen = gameEngine.GetNextGeneration(grid);
-
-        Console.WriteLine("Generation 1:");
-        GridDisplay.Output(gridNextGen);
+            Console.WriteLine($"Generation {gen}:");
+            GridDisplay.Output(grid);
+            grid = gameEngine.GetNextGeneration(grid);
+        }
     }
 }
