@@ -200,13 +200,13 @@ Structuring the code to reflect these state transitions keeps the system highly 
 ### 4.2. Designs
 
 #### 4.2.1. Application Design
-![App Arch](assets/application-design.drawio.svg)
+![App Arch](assets/application-design.drawio.png)
 
 #### 4.2.2. Game Engine Design
-![Algorithm Flow](assets/game-engine-design.drawio.svg)
+![Algorithm Flow](assets/game-engine-design.drawio.png)
 
 #### 4.2.3. Infrastructure Design
-![Infrastructure Architecture](assets/infrastructure-design.drawio.svg)
+![Infrastructure Architecture](assets/infrastructure-design.drawio.png)
 
 ## 5. Development
 The development of the [Application](#421-application) follows an interative approach, building up and around the fundamental logic unit, the [Game Rules](#312-rules).
@@ -317,7 +317,7 @@ curl http://ozow-alb-621610752.eu-north-1.elb.amazonaws.com/
 
 Referencing the [manual setup](#611-manual-setup-steps-with-respective-config-of-interest) above, it's trivial to see the groupings which would drive a modular IAC approach via Terraform.
 
-![App Arch](assets/infrastructure-as-code-design.drawio.svg)
+![App Arch](assets/infrastructure-as-code-design.drawio.png)
 
 NB. Not shown on the diagram is config that would be captured in a terraform file. This includes but is not limited to `region`, `CIDRs`, `instance type(s)`, `ports`, `IAM usernames` ,etc.
 
