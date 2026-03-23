@@ -269,14 +269,14 @@ NB. Whilst the assessment mentioned `EU-WEST-1`, I opted for the default `EU-NOR
 4. Create Custom VPC (`vpc-0b5e56ff2da528490/ozow-vpc` | CIDR: `10.0.0.0/16`) (NB. CIDR value used as per AWS courses I've completed in the past)
 5. Create Internet Gateway (`igw-004c1c73db56600bc/ozow-igw` | attached to `vpc-0b5e56ff2da528490/ozow-vpc`)
 6. Create Route Table (`rtb-0c87bd68b92fa3ae2/ozow-public-rt` | associated with `vpc-0b5e56ff2da528490/ozow-vpc`) (Route Destination: `0.0.0.0/0` | Route Target: `igw-004c1c73db56600bc`)
-7. Create Subnet A (`public-subnet-a`|`eu-north-1a`|`10.0.1.0/24`)  `auto-assign public IPv4` and RouteTable configured for `rtb-0c87bd68b92fa3ae2 (ozow-public-rt)`
-8. Create Subnet B (`public-subnet-b(eu-north-1a|10.0.1.0/24) `auto-assign public IPv4` and RouteTable configured` for `rtb-0c87bd68b92fa3ae2 (ozow-public-rt)`
+7. Create Subnet A (`public-subnet-a` | `eu-north-1a` | `10.0.1.0/24`) `auto-assign public IPv4` and RouteTable configured for `rtb-0c87bd68b92fa3ae2 (ozow-public-rt)`
+8. Create Subnet B (`public-subnet-b` | `eu-north-1b` | `10.0.2.0/24`) `auto-assign public IPv4` and RouteTable configured for `rtb-0c87bd68b92fa3ae2 (ozow-public-rt)`
 8. Create Security Group for ALB (`alb-sg` | Inbound `HTTP 80 from 0.0.0.0/0` | Outbound `All` | associated with `vpc-049670ac3fb0177c0/ozow-vpc`) 
 9. Create Security Group for EC2 (`ec2-sg` | Inbound `TCP 8080 from alb-sg` | Outbound `All` | associated with `vpc-049670ac3fb0177c0/ozow-vpc`)
 10. Create EC2 Instance A (`ozow-instance-a` | `Linux 2023` | `t3.micro` | SecurityGroup: `ec2-sg`)
 11. Create EC2 Instance B  (`ozow-instance-b` | `Linux 2023` | `t3.micro` | SecurityGroup: `ec2-sg`)
 12. Create Target Group (`ozow-tg` | `HTTP 8080` | vpc: `vpc-049670ac3fb0177c0/ozow-vpc` ) Instances (`ozow-instance-a`|`ozow-instance-b`)
-13. Create Application Load Balancer (`ozow-instance-a` | `Internet Facing`) Subnets (`public-subnet-a` | `public-subnet-b`) SecurityGroup: `ec2-sg` Listener: `HTTP 80` to `ozow-tg`
+13. Create Application Load Balancer (`ozow-alb` | `Internet Facing`) Subnets (`public-subnet-a` | `public-subnet-b`) SecurityGroup: `ec2-sg` Listener: `HTTP 80` to `ozow-tg`
 14. Create IAM Review User [OzowSheldonReddy2026](https://367396826363.signin.aws.amazon.com/console) (`ViewOnlyAccess`)
 
 #### 6.1.2. Infrastructure as Code (IAC)
