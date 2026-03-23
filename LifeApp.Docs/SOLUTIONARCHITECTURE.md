@@ -262,7 +262,7 @@ Given the time constraints, I have opted for a manual setup and configuration of
 
 NB. Whilst the assessment mentioned `EU-WEST-1`, I opted for the default `EU-NORTH-1` as it usually works for our POCs.  
 
-#### 6.1.1. Manual Steps
+#### 6.1.1. Manual setup steps with respective config of interest
 1. Select Region (`eu-north-1`)
 2. Create IAM Admin User [admin-provisioner](https://367396826363.signin.aws.amazon.com/console)(`AdministratorAccess`)
 3. Delete Default VPC (`vpc-0b5e56ff2da528490/ozow-vpc`)
@@ -276,10 +276,48 @@ NB. Whilst the assessment mentioned `EU-WEST-1`, I opted for the default `EU-NOR
 10. Create EC2 Instance A (`ozow-instance-a` | `Linux 2023` | `t3.micro` | SecurityGroup: `ec2-sg`)
 11. Create EC2 Instance B  (`ozow-instance-b` | `Linux 2023` | `t3.micro` | SecurityGroup: `ec2-sg`)
 12. Create Target Group (`ozow-tg` | `HTTP 8080` | vpc: `vpc-049670ac3fb0177c0/ozow-vpc` ) Instances (`ozow-instance-a`|`ozow-instance-b`)
-13. Create Application Load Balancer (`ozow-alb` | `Internet Facing`) Subnets (`public-subnet-a` | `public-subnet-b`) SecurityGroup: `ec2-sg` Listener: `HTTP 80` to `ozow-tg`
+13. Create Application Load Balancer [ALB URL](http://ozow-alb-621610752.eu-north-1.elb.amazonaws.com/) (`ozow-alb` | `Internet Facing`) Subnets (`public-subnet-a` | `public-subnet-b`) SecurityGroup: `ec2-sg` Listener: `HTTP 80` to `ozow-tg`
 14. Create IAM Review User [OzowSheldonReddy2026](https://367396826363.signin.aws.amazon.com/console) (`ViewOnlyAccess`)
+15. Install Python Flask on EC2 Instance A (hostname:`ip-10-0-1-205.eu-north-1.compute.internal`) Public Subnet A: (`public-subnet-a` | `10.0.1.0`)
+16. Install Python Flask on EC2 Instance B (hostname:`ip-10-0-2-73.eu-north-1.compute.internal`) Public Subnet B: (`public-subnet-b` | `10.0.2.0`)
+
+NB. Flask configured for port 8080 over 80 due to requirement to not run apps as root (Port 80) as it is a security risk.
+
+#### 6.1.1.1 Outcome
+The [ALB](http://ozow-alb-621610752.eu-north-1.elb.amazonaws.com/) distributes traffic in a round-robin manner and returns of the hostname of the EC2 instance which it directed traffic to for the respective request.
+As per the [Infrastructure design](#423-infrastructure):
+1. The security group (`ec2-sg`) is associated with both EC2 instances and controls access.
+2. The Target Group (`ozow-tg`) targets both EC2 Instances and controls routing (health check mechanism ensures it targets healthy EC2 instance only).
+3. The ALB (`ozow-alb`) links the two. It receives requests as per its own security group (`alb-sg`) and locates the target group (`ozow-tg`) to foward the request to.
+
+NB.There is an inherant circular dependency where ALB is associated with EC2 instances so traffic ingresses EC2 via ALB only. Then EC2 associates with ALB so the Target Group is registered. 
+Association is effected via the respective `id` fields.
+
+#### 6.1.1.2. Setup verification
+
+Access the [ALB](http://ozow-alb-621610752.eu-north-1.elb.amazonaws.com/) and refresh the screen and note the change in hostname 
+
+*OR*
+
+Copy-Paste the following in your local terminal to bypass any caching on the URL.
+`
+curl http://ozow-alb-621610752.eu-north-1.elb.amazonaws.com/
+curl http://ozow-alb-621610752.eu-north-1.elb.amazonaws.com/
+curl http://ozow-alb-621610752.eu-north-1.elb.amazonaws.com/
+curl http://ozow-alb-621610752.eu-north-1.elb.amazonaws.com/
+curl http://ozow-alb-621610752.eu-north-1.elb.amazonaws.com/
+curl http://ozow-alb-621610752.eu-north-1.elb.amazonaws.com/
+curl http://ozow-alb-621610752.eu-north-1.elb.amazonaws.com/
+curl http://ozow-alb-621610752.eu-north-1.elb.amazonaws.com/
+`
 
 #### 6.1.2. Infrastructure as Code (IAC)
+
+Referencing the [manual setup](#611-manual-setup-steps-with-respective-config-of-interest) above, it's trivial to see the groupings which would drive a modular IAC approach via Terraform.
+
+![App Arch](assets/infrastructure-as-code-design.drawio.svg)
+
+NB. Not shown on the diagram is config that would be captured in a terraform file. This includes but is not limited to `region`, `CIDRs`, `instance type(s)`, `ports`, `IAM usernames` ,etc.
 
 ## 7. Testing
 
@@ -313,3 +351,5 @@ Without the seed, every test run would produce different grids, making it imposs
 [Sheldon Reddy - Engineering Thesis](https://1drv.ms/b/c/f5e6b5f19a1ec68c/IQCfZ1nfTJGbSZo-6bI-l3F4AQSQXjkSfHigr1XTs2SqOJk?e=ZUqqqX).
 [MIT Notes](https://web.mit.edu/sp.268/www/2010/lifeSlides.pdf)
 [AWS Icon Pack](https://aws.amazon.com/architecture/icons/)
+[Deploying Flask Apps on AWS EC2](https://medium.com/@opeoluwaakinsiku2017/deploying-a-python-flask-app-on-aws-ec2-2024-618663e9a894)
+
