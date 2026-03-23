@@ -113,7 +113,8 @@ You are able to slow down the generation to a point where you can observe the ru
 Whilst researching Conway's Game of Life and processing its rules and considering my approach it became clear that I could draw on knowledge from both my undergrad studies and professional career. 
 Coming from an Electronic Engineering background, I naturally interpretted this problem through the lens of digital signal (image) processing and matrix mathematics. 
 
-Whilst I wrote my university thesis over a decade ago, long before AI existed in its current form, the fundamental knowledge I developed then provided the intuition for how to architect this system today.
+Whilst I completed my engineering [Final-Year Research & Design Thesis](https://1drv.ms/b/c/f5e6b5f19a1ec68c/IQCfZ1nfTJGbSZo-6bI-l3F4AQSQXjkSfHigr1XTs2SqOJk?e=ZUqqqX) over a decade ago, long before AI existed in its current form, the fundamental knowledge I developed then provided the intuition for how to architect this system today.
+Ultimately algorithms like this one for the basis of Digital Systems concepts within the Electronic Engineering discipline and play a critical role in image processing. 
 
 This is documented in detail in [Application Decisions](#411-application) below and references my [Engineering Thesis](https://1drv.ms/b/c/f5e6b5f19a1ec68c/IQCfZ1nfTJGbSZo-6bI-l3F4AQSQXjkSfHigr1XTs2SqOJk?e=ZUqqqX).
 
@@ -348,8 +349,25 @@ Without the seed, every test run would produce different grids, making it imposs
 [Wikipedia page](https://en.wikipedia.org/wiki/Conway%27s_Game_of_Life)
 [Ruleset reference](https://playgameoflife.com/info)
 [Interactive demo](https://playgameoflife.com/)
-[Sheldon Reddy - Engineering Thesis](https://1drv.ms/b/c/f5e6b5f19a1ec68c/IQCfZ1nfTJGbSZo-6bI-l3F4AQSQXjkSfHigr1XTs2SqOJk?e=ZUqqqX).
-[MIT Notes](https://web.mit.edu/sp.268/www/2010/lifeSlides.pdf)
+[Sheldon Reddy - Final Year Engineering Research & Design Thesis](https://1drv.ms/b/c/f5e6b5f19a1ec68c/IQCfZ1nfTJGbSZo-6bI-l3F4AQSQXjkSfHigr1XTs2SqOJk?e=ZUqqqX).
+[Cornwell Convolution](https://www.cs.cornell.edu/courses/cs1114/2013sp/sections/S06_convolution.pdf)
+[MIT Conways GOL Patterns](https://web.mit.edu/sp.268/www/2010/lifeSlides.pdf)
 [AWS Icon Pack](https://aws.amazon.com/architecture/icons/)
 [Deploying Flask Apps on AWS EC2](https://medium.com/@opeoluwaakinsiku2017/deploying-a-python-flask-app-on-aws-ec2-2024-618663e9a894)
 
+## 9. AI Usage
+This project was developed without the assistance of an AI assistant (LLM, Agent or other) to transparently demonstrate my ability as a software developer and solution architect.
+
+I opted for a research based approach to completing this assessment and leverage my own thesis as well as sites listed under the [references](#8-references) section.
+
+Whilst I have not used an AI assistant in this assessment, I do use them in my day-to-day activities for:
+- Proof reading documentation I write
+- Summarising documents and emails
+- Assisting with generating overviews from large repositories
+- Generating acceptance tests from requirements
+- Unit tests review and verification
+- Technical debt
+- Code review, etc.
+
+It's imperative to note, in my day-to-day activities - all design decisions, requirements interpretation, and final code review remains under my control. 
+I strongly believe whilst AI may serve as a development accelerator I am still responsible for maintaining code quality and architectural integrity.
